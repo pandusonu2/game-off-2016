@@ -87,7 +87,7 @@ def runGame():
 			x, y = getTrueCoord(zombie['x'], zombie['y'])
 			if y > 0 and x > -25 and x < 25:
 				dist = int(math.sqrt((x*x) + (y*y))) + 1
-				mainWindow.blit(pygame.transform.scale(zombie['surface'], (int(zombie['width']/dist), int(zombie['height']/dist))), pygame.Rect(250 + x*10, 250 + y*10, x+25, 350))
+				mainWindow.blit(pygame.transform.scale(zombie['surface'], (int(zombie['width']/dist), int(zombie['height']/dist))), pygame.Rect(250 + x*10, 250 + y*10, (x+25)*10, 350))
 				pass
 			pass
 
