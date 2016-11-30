@@ -102,10 +102,10 @@ def runGame():
 				pygame.quit()
 				sys.exit()
 			elif event.type == KEYDOWN:
-				if event.key in (K_UP, K_w):
+				if event.key in (K_DOWN, K_s):
 					moveDown = False
 					moveUp = True
-				elif event.key in (K_DOWN, K_s):
+				elif event.key in (K_UP, K_w):
 					moveUp = False
 					moveDown = True
 				elif event.key in (K_LEFT, K_a):
@@ -195,7 +195,7 @@ def getRandomPos():
 
 def makeNewZombie():
 	zomb={}
-	generalSize = random.randint(20, 30)
+	generalSize = random.randint(50, 100)
 	multiplier = random.randint(1, 3)
 	zomb['width'] = (generalSize + random.randint(0, 10)) * multiplier
 	zomb['height'] = (generalSize + random.randint(0, 10)) * multiplier
