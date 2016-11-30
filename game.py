@@ -86,8 +86,8 @@ def runGame():
 		for zombie in zombies:
 			x, y = getTrueCoord(zombie['x'], zombie['y'])
 			if y > 0 and x > -25 and x < 25:
-				dist = int(math.sqrt((x*x) + (y*y)))
-				mainWindow.blit(pygame.transform.scale(zombie['surface'], (zombie['width'], zombie['height'])), pygame.Rect(250 + x*10, 250 + y*10, x+25, 350))
+				dist = int(math.sqrt((x*x) + (y*y))) + 1
+				mainWindow.blit(pygame.transform.scale(zombie['surface'], (int(zombie['width']/dist), int(zombie['height']/dist))), pygame.Rect(250 + x*10, 250 + y*10, x+25, 350))
 				pass
 			pass
 
@@ -195,7 +195,7 @@ def getRandomPos():
 
 def makeNewZombie():
 	zomb={}
-	generalSize = random.randint(5, 25)
+	generalSize = random.randint(20, 30)
 	multiplier = random.randint(1, 3)
 	zomb['width'] = (generalSize + random.randint(0, 10)) * multiplier
 	zomb['height'] = (generalSize + random.randint(0, 10)) * multiplier
