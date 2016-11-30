@@ -88,14 +88,15 @@ def runGame():
 			if y > 0 and x > -25 and x < 25:
 				dist = int(math.sqrt((x*x) + (y*y))) + 1
 				mainWindow.blit(pygame.transform.scale(zombie['surface'], (int(zombie['width']/dist), int(zombie['height']/dist))), pygame.Rect(250 + x*10, 250 + y*10, (x+25)*10, 350))
-				pass
-			pass
 
 		#draw the axe
 		mainWindow.blit(pygame.transform.scale(axeImage, (140, 100)), pygame.Rect(550, 380, 140, 100))
 
 		#draw the view at bottom
 		drawSonar()
+
+		#draw Score
+		drawScore()
 
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -170,7 +171,18 @@ def changeAngle(movement):
 		return False, True
 
 def checkFront():
-	pass
+	for i in range(len(zombies)-1, -1, -1):
+		zombie = zombies[i]
+		x, y = getTrueCoord(zombie['x'], zombie['y'])
+		if y > 0 and y < 5 and x > -25 and x < 25:
+			zombies.remove(zombie)
+			playerObj['score'] += 1
+
+def drawScore():
+	winSurf = basicFont.render(str(playerObj['score']), True, (0,0,0))
+	winRect = winSurf.get_rect()
+	winRect.center = (HALF_WIDTH, HALF_HEIGHT)
+	mainWindow.blit(winSurf, winRect)
 
 def drawSonar():
 	mainWindow.blit(pygame.transform.scale(sonarImage, (150, 150)), pygame.Rect(5, 345, 150, 150))
