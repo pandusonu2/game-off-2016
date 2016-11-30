@@ -80,14 +80,17 @@ def runGame():
 			zombies.append(makeNewZombie())
 
 		#draw the background
-		mainWindow.blit(background, pygame.Rect(0, 0, 700, 500))
+		mainWindow.blit(background, pygame.Rect(0, 0, 700, 400))
 
 		#draw the other zombies
 		for zombie in zombies:
 			x, y = getTrueCoord(zombie['x'], zombie['y'])
 			if y > 0 and x > -25 and x < 25:
 				dist = int(math.sqrt((x*x) + (y*y))) + 1
-				mainWindow.blit(pygame.transform.scale(zombie['surface'], (int(zombie['width']/dist), int(zombie['height']/dist))), pygame.Rect(250 + x*10, 250 + y*10, (x+25)*10, 350))
+				zombheight = int(zombie['height']/dist)
+				zombiewidth = int(zombie['width']/dist)
+				reqImg = pygame.transform.scale(zombie['surface'], (zombiewidth, zombheight))
+				mainWindow.blit(reqImg, pygame.Rect(250 + x*10, 350 - int(zombheight/2), zombiewidth, zombheight))
 
 		#draw the axe
 		mainWindow.blit(pygame.transform.scale(axeImage, (140, 100)), pygame.Rect(550, 380, 140, 100))
