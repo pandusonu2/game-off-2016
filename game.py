@@ -84,7 +84,11 @@ def runGame():
 
 		#draw the other zombies
 		for zombie in zombies:
-
+			x, y = getTrueCoord(zombie['x'], zombie['y'])
+			if y > 0 and x > -25 and x < 25:
+				dist = int(math.sqrt((x*x) + (y*y)))
+				mainWindow.blit(pygame.transform.scale(zombie['surface'], (zombie['width'], zombie['height'])), pygame.Rect(250 + x*10, 250 + y*10, x+25, 350))
+				pass
 			pass
 
 		#draw the axe
@@ -175,7 +179,7 @@ def drawSonar():
 		sonarX = int(x*3)
 		sonarY = int(y*3)
 		if sonarX > -75 and sonarX < 75 and sonarY > -75 and sonarY < 75:
-			pygame.draw.circle(mainWindow, GREEN, (5 + 75 + sonarX, 345 + 75 + sonarY), 10, 0)
+			pygame.draw.circle(mainWindow, GREEN, (5 + 75 + sonarX, 345 + 75 + sonarY), 5, 0)
 
 def getTrueCoord(x, y):
 	x -= playerObj['x']
