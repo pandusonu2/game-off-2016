@@ -61,6 +61,14 @@ def runGame():
 		for zombie in zombies:
 			zombie['x'] += zombie['movex']
 			zombie['y'] += zombie['movey']
+			if zombie['x'] < 0:
+				zombie['x'] = 0
+			if zombie['x'] > 100:
+				zombie['x'] = 100
+			if zombie['y'] < 0:
+				zombie['y'] = 0
+			if zombie['y'] > 100:
+				zombie['y'] = 100
 
 			#random change of direction
 			if random.randint(0,99) < 2:
@@ -68,7 +76,7 @@ def runGame():
 				zombie['movey'] = getRandomVelocity()
 
 		#add more zombies
-		while len(zombies) < 10:
+		while len(zombies) < 100:
 			zombies.append(makeNewZombie())
 
 		#draw the background
@@ -164,12 +172,16 @@ def drawSonar():
 	mainWindow.blit(pygame.transform.scale(sonarImage, (150, 150)), pygame.Rect(5, 345, 150, 150))
 	for zombie in zombies:
 		x, y = getTrueCoord(zombie['x'], zombie['y'])
+		sonarX = int(x*3)
+		sonarY = int(y*3)
+		if sonarX > -75 and sonarX < 75 and sonarY > -75 and sonarY < 75:
+			pygame.draw.circle(mainWindow, GREEN, (5 + 75 + sonarX, 345 + 75 + sonarY), 10, 0)
 
 def getTrueCoord(x, y):
 	x -= playerObj['x']
 	y -= playerObj['y']
-	newX = x * math.cos(math.radians(playerObj['angle'])) + y * math.sin(math.radians(playerObj['angle']))
-	newY = -x * math.sin(math.radians(playerObj['angle'])) + y * math.cos(math.radians(playerObj['angle']))
+	newX = (x * math.cos(math.radians(playerObj['angle']))) + (y * math.sin(math.radians(playerObj['angle'])))
+	newY = (-x * math.sin(math.radians(playerObj['angle']))) + (y * math.cos(math.radians(playerObj['angle'])))
 	return newX, newY
 
 def getRandomPos():
@@ -190,7 +202,7 @@ def makeNewZombie():
 	return zomb
 
 def getRandomVelocity():
-	speed = random.randint(0,7)
+	speed = random.randint(0,1)
 	if random.randint(0,1) == 0:
 		return speed
 	else:
