@@ -27,7 +27,10 @@ def main():
 	basicFont = pygame.font.Font('freesansbold.ttf', 32)
 
 	zombies = []
-	playerObj = {}
+	playerObj = {'x':50,
+				 'y':50,
+				 'angle':0,
+				 'score':0}
 
 	#Load images
 	zombieImg = pygame.image.load('img/zombie.png')
@@ -45,11 +48,6 @@ def runGame():
 	winSurf = basicFont.render('You have killed zombies!!!', True, WHITE)
 	winRect = winSurf.get_rect()
 	winRect.center = (HALF_WIDTH, HALF_HEIGHT)
-
-	#stores player info
-	playerObj = {'x':50,
-				 'y':50,
-				 'angle':0}
 
 	moveLeft = False
 	moveRight = False
@@ -147,7 +145,6 @@ def runGame():
 		else:
 			mainWindow.blit(winSurf, winRect)
 
-		print playerObj
 		pygame.display.update()
 		FPSCLOCK.tick(FPS)
 
@@ -166,8 +163,14 @@ def checkFront():
 def drawSonar():
 	mainWindow.blit(pygame.transform.scale(sonarImage, (150, 150)), pygame.Rect(5, 345, 150, 150))
 	for zombie in zombies:
+		x, y = getTrueCoord(zombie['x'], zombie['y'])
 
-		pass
+def getTrueCoord(x, y):
+	x -= playerObj['x']
+	y -= playerObj['y']
+	newX = x * math.cos(math.radians(playerObj['angle'])) + y * math.sin(math.radians(playerObj['angle']))
+	newY = -x * math.sin(math.radians(playerObj['angle'])) + y * math.cos(math.radians(playerObj['angle']))
+	return newX, newY
 
 def getRandomPos():
 	x = random.randint(0, 100)
