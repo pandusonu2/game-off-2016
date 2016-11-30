@@ -18,7 +18,7 @@ pygame.display.set_caption('Hack the zombies!!')
 pygame.draw.rect(mainWindow,RED, (200,150, 100, 50))
 
 def main():
-	global FPSCLOCK, mainWindow, basicFont, zombieImg, background, axeImage, zombies
+	global FPSCLOCK, mainWindow, basicFont, sonarImage, zombieImg, background, axeImage, zombies, playerObj
 
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
@@ -27,11 +27,13 @@ def main():
 	basicFont = pygame.font.Font('freesansbold.ttf', 32)
 
 	zombies = []
+	playerObj = {}
 
 	#Load images
 	zombieImg = pygame.image.load('img/zombie.png')
 	background = pygame.image.load('img/background.png')
 	axeImage = pygame.image.load('img/axe.png')
+	sonarImage = pygame.image.load('img/sonar.png')
 
 	while True:
 		runGame()
@@ -53,6 +55,8 @@ def runGame():
 	moveRight = False
 	moveUp = False
 	moveDown = False
+	turnLeft = False
+	turnRight = False
 
 	while True:
 		#moving the zombies
@@ -74,10 +78,11 @@ def runGame():
 
 		#draw the other zombies
 		for zombie in zombies:
+
 			pass
 
 		#draw the axe
-		mainWindow.blit(axeImage, pygame.Rect())
+		mainWindow.blit(pygame.transform.scale(axeImage, (140, 100)), pygame.Rect(550, 380, 140, 100))
 
 		#draw the view at bottom
 		drawSonar()
@@ -114,19 +119,27 @@ def runGame():
 					pygame.quit()
 					sys.exit()
 			elif event.type == MOUSEMOTION:
-				changeAngle()
+				turnLeft, turnRight = changeAngle(event)
 			elif event.type == MOUSEBUTTONUP:
 				checkFront()
 
 		if not gameOverMode:
 			if moveLeft:
-				playerObj['x'] -= 3
+				playerObj['x'] = max(playerObj['x'] - 3, 0)
 			if moveRight:
-				playerObj['x'] += 3
+				playerObj['x'] = min(playerObj['x'] + 3, 100)
 			if moveDown:
-				playerObj['y'] -= 3
+				playerObj['y'] = max(playerObj['y'] - 3, 0)
 			if moveUp:
-				playerObj['y'] += 3
+				playerObj['y'] = min(playerObj['y'] + 3, 100)
+			if turnRight:
+				playerObj['angle'] -= 1
+			if turnLeft:
+				playerObj['angle'] += 1
+			if playerObj['angle'] < 0:
+				playerObj['angle'] += 360
+			elif playerObj['angle'] > 360:
+				playerObj['angle'] -= 360
 
 			#Check if any collision with zombie
 			for i in range(len(zombies)-1, -1, -1):
@@ -134,17 +147,27 @@ def runGame():
 		else:
 			mainWindow.blit(winSurf, winRect)
 
+		print playerObj
 		pygame.display.update()
 		FPSCLOCK.tick(FPS)
 
-def changeAngle():
-	pass
+def changeAngle(movement):
+	mousePos = movement.pos
+	if mousePos[0] <= 150:
+		return True, False
+	elif mousePos[0] < 350:
+		return False, False
+	else:
+		return False, True
 
 def checkFront():
 	pass
 
 def drawSonar():
-	pass
+	mainWindow.blit(pygame.transform.scale(sonarImage, (150, 150)), pygame.Rect(5, 345, 150, 150))
+	for zombie in zombies:
+
+		pass
 
 def getRandomPos():
 	x = random.randint(0, 100)
